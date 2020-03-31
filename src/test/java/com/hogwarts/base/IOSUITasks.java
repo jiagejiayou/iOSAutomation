@@ -5,8 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
-
 public class IOSUITasks {
 
     private static Logger logger = Logger.getLogger(IOSUITasks.class);
@@ -30,7 +28,7 @@ public class IOSUITasks {
     }
 
     public static void clickConfirmNewGameButton(WebDriver driver) throws UINotFoundException {
-        logger.info("单击 New Game 按钮");
+        logger.info("单击 Confirm New Game 按钮");
         WebElement btn = findObject("//XCUIElementTypeButton[@name='New Game']", Type.XPATH, driver);
         btn.click();
     }
@@ -57,6 +55,11 @@ public class IOSUITasks {
         logger.info("输入 " + name);
         WebElement txt = findObject("//XCUIElementTypeTextField[contains(@value, 'Player')]", Type.XPATH, driver);
         txt.sendKeys(name);
+    }
+
+    public static boolean isDashboardEmpty(WebDriver driver) throws UINotFoundException{
+        WebElement dashboardTxt = findObject("//XCUIElementTypeStaticText[contains(@name, 'TAP + TO ADD A PLAYER')]", Type.XPATH, driver);
+        return dashboardTxt != null;
     }
 
     public static boolean isCannonExist(WebDriver driver) throws UINotFoundException {
@@ -87,17 +90,19 @@ public class IOSUITasks {
      * @throws UINotFoundException
      */
     private static WebElement findObject(String selector, Type type, WebDriver driver, int waitMax) throws UINotFoundException {
-        int size = 0;
         WebElement obj = null;
         long start = System.currentTimeMillis();
         long now = System.currentTimeMillis();
-        while (((now - start) < waitMax * 1000) && (size == 0)) {
-            Tools.wait(2);
+        while ((now - start) < waitMax * 1000) {
             if (type == Type.XPATH)
                 obj = driver.findElement(By.xpath(selector));
             else
                 obj = driver.findElement(By.id(selector));
             now = System.currentTimeMillis();
+            if(obj != null){
+                break;
+            }
+            Tools.wait(1);
         }
 
         if (obj == null) {

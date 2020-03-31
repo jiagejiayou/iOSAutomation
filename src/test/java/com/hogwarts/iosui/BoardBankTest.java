@@ -2,7 +2,6 @@ package com.hogwarts.iosui;
 
 import com.hogwarts.base.IOSUIBase;
 import com.hogwarts.base.IOSUITasks;
-import com.hogwarts.base.Tools;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,6 +33,6 @@ public class BoardBankTest extends IOSUIBase {
 
         IOSUITasks.clickDeleteMenu(driver);
 
-        Tools.wait(10);
+        Assert.assertTrue("检查首页是否为空！", IOSUITasks.isDashboardEmpty(driver));
     }
 }
